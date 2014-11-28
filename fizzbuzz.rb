@@ -13,12 +13,13 @@ class Fizzbuzz
     end
   end
 
+  private
+  # 小数点以下が全部0以外が入っているかどうか
   def is_int? p
     si = p.split(".")[1]
     si =~ /[1-9]+/ ? false : true
   end
 
-  private
   # 数値で割り切れるかどうか 割り切れたらtrue 割り切れなければfalse
   def is_value_warikire? (w,p)
     is_int? (p/w).to_s
