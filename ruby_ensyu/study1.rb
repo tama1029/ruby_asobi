@@ -2,7 +2,8 @@
 
 # 変数
 #
-# オブジェクトにラベルを付ける　変数自体はメモリ参照なのかな
+# オブジェクトにラベルを付ける
+# rubyのオブジェクトは全てオブジェクトidというもので管理されている
 # greeting : Stringオブジェクト
 # http://www.minituku.net/courses/566428009/lessons/660326487/texts/56900725?locale=ja
 
@@ -10,6 +11,17 @@ greeting = "Hello, Ruby !"
 p greeting
 p greeting.class
 p "#{greeting}"
+
+# オブジェクトidは個別に割り振られる
+
+p greeting.object_id
+greeting2 = "hoge"
+p greeting2.object_id
+
+# ラベルを付けるというのは　詳しくいうと　オブジェクトidを記憶する
+
+greeting3 = greeting
+p greeting3.object_id
 
 # if thenは書かない
 
@@ -43,3 +55,5 @@ def method_test
 end
 
 method_test
+
+# 偽の値になるのは　false,nilのみ
