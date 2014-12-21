@@ -1,0 +1,7 @@
+adapter: mysql2
+encoding: utf8
+database: matome_development
+pool: 5
+username: root
+password:
+socket: /tmp/mysql.sock

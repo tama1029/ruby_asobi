@@ -1,5 +1,8 @@
 require 'rss'
 require 'nokogiri'
+require 'mysql2'
+require 'active_record'
+require 'activerecord-import'
 
 rss_data = RSS::Parser.parse('http://blog.esuteru.com/index.rdf')
 
