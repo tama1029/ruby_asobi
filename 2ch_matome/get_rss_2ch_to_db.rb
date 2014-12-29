@@ -4,7 +4,6 @@ require 'mysql2'
 require 'active_record'
 require 'activerecord-import'
 
-rss_data = RSS::Parser.parse('http://blog.esuteru.com/index.rdf')
 config = YAML.load_file('database.yml')
 ActiveRecord::Base.establish_connection(config)
 
@@ -24,20 +23,34 @@ class Item < ActiveRecord::Base
             length: { maximum: 255 }
 end
 
-begin
-  insert_data = []
-  rss_data.items.each do |item|
-    entry = Item.new
-    entry.site_id = 1
-    entry.title = item.title
-    entry.link = item.link
-    entry.dc_date = item.respond_to?(:pubDate) ? item.pubDate : item.dc_date
-    entry.image_link = Nokogiri::HTML.parse(item.content_encoded).css("img").attribute("src").value
-    p item.title
-    p item.link
-    p item.respond_to?(:pubDate) ? item.pubDate : item.dc_date
-    p Nokogiri::HTML.parse(item.content_encoded).css("img").attribute("src").value
-    p '-------------'
-  end 
-  Item.import insert_data
+class Site < ActiveRecord::Base
 end
+
+p Site.all
+
+Site.all.each do |site|
+  begin
+    insert_data = []
+    rss_data = RSS::Parser.parse(site.rss_url)
+
+    rss_data.items.each do |item|
+      entry = Item.new
+      entry.site_id = site.id
+      entry.title = item.title
+      entry.link = item.link
+      entry.dc_date = item.respond_to?(:pubDate) ? item.pubDate : item.dc_date
+      entry.image_link = Nokogiri::HTML.parse(item.content_encoded).css("img").attribute("src").value
+      insert_data << entry
+      p site.id
+      p item.title
+      p item.link
+      p item.respond_to?(:pubDate) ? item.pubDate : item.dc_date
+      p Nokogiri::HTML.parse(item.content_encoded).css("img").attribute("src").value
+      p '-------------'
+    end 
+
+    Item.import insert_data
+  end
+end
+
+
